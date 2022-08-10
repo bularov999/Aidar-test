@@ -1,9 +1,9 @@
-const db = require('../models/comments.model')
+const db = require('../models/index')
 const Comments = db.comments
 
 class CommentsService {
     async create(user, postId, comment) {
-        return await Comments.create({userId: user_user.id, postId, comment })
+        return await Comments.create({userId: user.user_id, postId, comment })
     }
 }
 module.exports = new CommentsService()
