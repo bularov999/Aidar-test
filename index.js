@@ -10,9 +10,7 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use((err, req, res, next) => {
-    customErrorHandler(err, res);
-  })
+
 app.get('/health-check', (req, res) => {res.status(200).send('Hello')})
 app.use('/user', userRouter)
 app.use('/post', postRouter)
