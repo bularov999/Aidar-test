@@ -1,0 +1,45 @@
+version: '2'
+networks:
+    etl_dev:
+
+services:
+  postgres:
+    image: postgres:11.5
+    container_name: ${HOST}
+    restart: always
+    environment:
+      POSTGRES_USER: ${USER}
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DB}
+    volumes:
+      - ../tmp/postgres/${DB}:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - etl_dev
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    links:
+      - postgres:postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start
+    networks:
+      - etl_dev
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - etl_dev
